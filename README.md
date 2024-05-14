@@ -52,4 +52,4 @@ config.SaveConfig();
 ```
 
 <h1>The problem with this library</h1>
-<p>Even if this library is very small, it allocates a lot on heap (Mostly strings). That makes it sometimes slow, aswell as the json library itself is not that fast.</p>
+<p>Even if this library is very small, it allocates a lot on heap (Mostly strings). That makes it sometimes slow, aswell as the json library by nlohmann itself is not that fast.</p>
