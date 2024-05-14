@@ -23,7 +23,7 @@
 	config.AddFloat("f2", 999.9999f);
 
 	config.AddArray("a1", { 255, 255, 255, 255 });
-	config.AddArray("a2", { "gay", "gay2", "gay3" });
+	config.AddArray("a2", { "one", "two", "three" });
 
 	config.AddBool("b1", true);
 	config.AddBool("b2", false);
