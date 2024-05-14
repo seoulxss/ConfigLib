@@ -9,6 +9,3 @@
 ```
 <p> Now you can get the config by: </p>
 
-```
-	auto& config = con.GetConfig(L"Example.json");
-```
