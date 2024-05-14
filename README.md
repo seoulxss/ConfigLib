@@ -4,6 +4,8 @@
 <h1>Example</h1>
 
 ```
+	#include "ConfigLib.h"
+
 	ConfigLib::ConfigManager con(LR"(C:\YourPath\)");
 	con.AddConfig(L"Example.json");
 ```
@@ -38,6 +40,8 @@
 config.SaveConfig();
 ```
 <p> Deleting configs</p>
+
+
 
 ```
 	con.DeleteConfig(L"GayConf.json");
