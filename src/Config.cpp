@@ -83,7 +83,7 @@ bool ConfigLib::_Config::Config::LoadConfig()
 	if (std::filesystem::exists(m_FilePath))
 	{
 		if (!m_FileStream.is_open())
-			m_FileStream.open(m_FilePath, std::fstream::in | std::fstream::out | std::fstream::app)
+			m_FileStream.open(m_FilePath, std::fstream::in | std::fstream::out | std::fstream::app);
 
 		if (m_FileStream.is_open() && m_FileStream.peek() == std::fstream::traits_type::eof())
 		{
