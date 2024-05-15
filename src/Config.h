@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -11,8 +11,6 @@ namespace ConfigLib
 {
 	namespace _Config
 	{
-
-
 		class Config
 		{
 		public:
@@ -70,8 +68,12 @@ namespace ConfigLib
 			std::optional<_Type> GetValue(const char* key);
 
 			//! Simply saves the config
-			//! @return If the saving was suceessfully
+			//! @return If the saving was succeessfully
 			bool SaveConfig();
+
+			//! Loads the json file into memory
+			//! @return If the parsing was successfully
+			bool LoadConfig();
 
 		public:
 			std::wstring m_FileName = {};
@@ -97,7 +99,6 @@ namespace ConfigLib
 		}
 
 	}
-
 
 	class ConfigManager
 	{
@@ -132,6 +133,4 @@ namespace ConfigLib
 		const wchar_t* m_FolderPath = nullptr;
 
 	};
-
-
 }
