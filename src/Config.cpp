@@ -78,6 +78,30 @@ bool ConfigLib::_Config::Config::SaveConfig()
 	return false;
 }
 
+bool ConfigLib::_Config::Config::LoadConfig()
+{
+	if (std::filesystem::exists(m_FilePath))
+	{
+		if (!m_FileStream.is_open())
+			m_FileStream.open(m_FilePath, std::fstream::in | std::fstream::out | std::fstream::app)
+
+		if (m_FileStream.is_open() && m_FileStream.peek() == std::fstream::traits_type::eof())
+		{
+				m_FileStream.close();
+				return false;
+		}
+
+		if (m_FileStream.is_open() && m_FileStream.peek() != std::fstream::traits_type::eof())
+		{
+			m_Json = nlohmann::json::parse(m_FileStream);
+			m_FileStream.close();
+			return true;
+		}
+
+	}
+	return false;
+}
+
 ConfigLib::ConfigManager::ConfigManager(const wchar_t* ConfigFolderPath) : m_FolderPath(ConfigFolderPath)
 {
 	if (!std::filesystem::exists(ConfigFolderPath))
@@ -94,7 +118,7 @@ void ConfigLib::ConfigManager::GetAllConfigs()
 	for (const auto& entry : it)
 	{
 		//SUS
-		if (entry.path().extension() == (".json"))
+		if (entry.path().extension() == (L".json"))
 		{
 			m_Configs.emplace(entry.path().wstring(), _Config::Config(entry.path().filename().c_str(), entry.path().wstring().c_str()));
 		}
