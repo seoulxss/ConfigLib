@@ -47,7 +47,7 @@ config.SaveConfig();
 
 
 ```
-	con.DeleteConfig(L"GayConf.json");
+	con.DeleteConfig(L"Example.json");
 	con.DeleteAllConfigs();
 ```
 
