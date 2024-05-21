@@ -187,3 +187,21 @@ bool ConfigLib::ConfigManager::DeleteAllConfigs()
 
 	return false;
 }
+
+std::vector<std::wstring> ConfigLib::ConfigManager::GetAllConfigEntries()
+{
+	std::vector<std::wstring> vec;
+	vec.reserve(m_Configs.size());
+
+	for (const auto& entries : m_Configs)
+	{
+		vec.push_back(entries.second.m_FileName);
+	}
+
+	return vec;
+}
+
+std::wstring ConfigLib::ConfigManager::GetConfigFolderPath() const
+{
+	return std::wstring(m_FolderPath);
+}
