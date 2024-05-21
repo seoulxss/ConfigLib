@@ -9,10 +9,34 @@ bool ConfigLib::_Config::Config::AddInteger(const char* key, int value)
 	return true;
 }
 
+bool ConfigLib::_Config::Config::SetInteger(const char* key, int value)
+{
+	if (!m_Json.contains(key))
+	{
+		AddInteger(key, value);
+		return true;
+	}
+
+	m_Json[key] = value;
+	return true;
+}
+
 bool ConfigLib::_Config::Config::AddFloat(const char* key, float value)
 {
 	if (m_Json.contains(key))
 		return false;
+
+	m_Json[key] = value;
+	return true;
+}
+
+bool ConfigLib::_Config::Config::SetFloat(const char* key, float value)
+{
+	if (!m_Json.contains(key))
+	{
+		AddFloat(key, value);
+		return true;
+	}
 
 	m_Json[key] = value;
 	return true;
@@ -32,6 +56,23 @@ bool ConfigLib::_Config::Config::AddArray(const char* key, const std::vector<nlo
 	return true;
 }
 
+bool ConfigLib::_Config::Config::SetArray(const char* key, const std::vector<nlohmann::json>& values)
+{
+	if (!m_Json.contains(key))
+	{
+		AddArray(key, values);
+		return true;
+	}
+
+	nlohmann::json arrayJson = nlohmann::json::array();
+	for (const auto& value : values) {
+		arrayJson.push_back(value);
+	}
+
+	m_Json[key] = arrayJson;
+	return true;
+}
+
 bool ConfigLib::_Config::Config::AddBool(const char* key, bool value)
 {
 	if (m_Json.contains(key))
@@ -41,10 +82,34 @@ bool ConfigLib::_Config::Config::AddBool(const char* key, bool value)
 	return true;
 }
 
+bool ConfigLib::_Config::Config::SetBool(const char* key, bool value)
+{
+	if (!m_Json.contains(key))
+	{
+		AddBool(key, value);
+		return true;
+	}
+
+	m_Json[key] = value;
+	return true;
+}
+
 bool ConfigLib::_Config::Config::AddString(const char* key, const char* value)
 {
 	if (m_Json.contains(key))
 		return false;
+
+	m_Json[key] = value;
+	return true;
+}
+
+bool ConfigLib::_Config::Config::SetString(const char* key, const char* value)
+{
+	if (!m_Json.contains(key))
+	{
+		AddString(key, value);
+		return true;
+	}
 
 	m_Json[key] = value;
 	return true;
@@ -114,13 +179,13 @@ void ConfigLib::ConfigManager::GetAllConfigs()
 {
 	m_Configs.clear();
 	
-	std::filesystem::directory_iterator it;
+	std::filesystem::directory_iterator it(m_FolderPath);
 	for (const auto& entry : it)
 	{
 		//SUS
 		if (entry.path().extension() == (L".json"))
 		{
-			m_Configs.emplace(entry.path().wstring(), _Config::Config(entry.path().filename().c_str(), entry.path().wstring().c_str()));
+			m_Configs.emplace(entry.path().filename().c_str(), _Config::Config(entry.path().filename().c_str(), entry.path().wstring().c_str()));
 		}
 	}
 }
