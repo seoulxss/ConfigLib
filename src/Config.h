@@ -36,11 +36,23 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddInteger(const char* key, int value);
 
+			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! @param key The key which u need, to identify the config (ConfigName)
+			//! @param value The value which it should change (int)
+			//! @return If it was successfully changed (bool)
+			bool SetInteger(const char* key, int value);
+
 			//! 
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (float)
 			//! @return If it was successfully added (bool)
 			bool AddFloat(const char* key, float value);
+
+			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! @param key The key which u need, to identify the config (ConfigName)
+			//! @param value The value which it should change (float)
+			//! @return If it was successfully changed (bool)
+			bool SetFloat(const char* key, float value);
 
 			//! 
 			//! @param key The key which u need, to identify the config (ConfigName)
@@ -48,17 +60,35 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddArray(const char* key, const std::vector<nlohmann::json>& values);
 
+			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! @param key The key which u need, to identify the config (ConfigName)
+			//! @param values The value which it should add (std::vector)
+			//! @return If it was successfully changed (bool)
+			bool SetArray(const char* key, const std::vector<nlohmann::json>& values);
+
 			//! 
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (bool)
 			//! @return If it was successfully added (bool)
 			bool AddBool(const char* key, bool value);
 
+			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! @param key The key which u need, to identify the config (ConfigName)
+			//! @param value The value which it should add (bool)
+			//! @return If it was successfully changed (bool)
+			bool SetBool(const char* key, bool value);
+
 			//! 
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (const char*)
 			//! @return If it was successfully added (bool)
 			bool AddString(const char* key, const char* value);
+
+			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! @param key The key which u need, to identify the config (ConfigName)
+			//! @param value The value which it should add (bool)
+			//! @return If it was successfully changed (bool)
+			bool SetString(const char* key, const char* value);
 
 			//! 
 			//! @tparam _Type The returned type (int, bool, float, etc..)
@@ -92,8 +122,8 @@ namespace ConfigLib
 			auto it = m_Json.find(key);
 			if (it != m_Json.end())
 			{
-				if (_Type val = it.value().get<_Type>())
-					return val;
+				_Type val = it.value().get<_Type>();
+				return val;
 			}
 			return std::nullopt;
 		}
