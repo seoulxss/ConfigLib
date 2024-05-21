@@ -127,9 +127,16 @@ namespace ConfigLib
 		//! @return True if all configs got deleted, false if something fails (mostly wrong path))
 		bool DeleteAllConfigs();
 
+		//! 
+		//! @return Returns all config names in a vector as a std::wstring
+		std::vector<std::wstring> GetAllConfigEntries();
+
+		//! 
+		//! @return Returns the current folder path
+		std::wstring GetConfigFolderPath() const;
+
 	private:
 		std::unordered_map<std::wstring, ConfigLib::_Config::Config> m_Configs;
-
 		const wchar_t* m_FolderPath = nullptr;
 
 	};
