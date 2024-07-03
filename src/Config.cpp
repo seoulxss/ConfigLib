@@ -21,8 +21,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Config.h"
-
 bool ConfigLib::_Config::Config::AddInteger(const char* key, int value)
 {
 	if (m_Json.contains(key))
@@ -34,10 +32,12 @@ bool ConfigLib::_Config::Config::AddInteger(const char* key, int value)
 
 bool ConfigLib::_Config::Config::SetInteger(const char* key, int value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (!m_Json.contains(key))
 	{
-		AddInteger(key, value);
-		return true;
+		//AddInteger(key, value);
+		return false;
 	}
 
 	m_Json[key] = value;
@@ -46,6 +46,8 @@ bool ConfigLib::_Config::Config::SetInteger(const char* key, int value)
 
 bool ConfigLib::_Config::Config::AddFloat(const char* key, float value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (m_Json.contains(key))
 		return false;
 
@@ -55,10 +57,12 @@ bool ConfigLib::_Config::Config::AddFloat(const char* key, float value)
 
 bool ConfigLib::_Config::Config::SetFloat(const char* key, float value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (!m_Json.contains(key))
 	{
-		AddFloat(key, value);
-		return true;
+		//AddFloat(key, value);
+		return false;
 	}
 
 	m_Json[key] = value;
@@ -67,6 +71,8 @@ bool ConfigLib::_Config::Config::SetFloat(const char* key, float value)
 
 bool ConfigLib::_Config::Config::AddArray(const char* key, const std::vector<nlohmann::json>& values)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (m_Json.contains(key))
 		return false;
 
@@ -81,10 +87,12 @@ bool ConfigLib::_Config::Config::AddArray(const char* key, const std::vector<nlo
 
 bool ConfigLib::_Config::Config::SetArray(const char* key, const std::vector<nlohmann::json>& values)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (!m_Json.contains(key))
 	{
-		AddArray(key, values);
-		return true;
+		//AddArray(key, values);
+		return false;
 	}
 
 	nlohmann::json arrayJson = nlohmann::json::array();
@@ -98,6 +106,8 @@ bool ConfigLib::_Config::Config::SetArray(const char* key, const std::vector<nlo
 
 bool ConfigLib::_Config::Config::AddBool(const char* key, bool value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (m_Json.contains(key))
 		return false;
 
@@ -107,10 +117,12 @@ bool ConfigLib::_Config::Config::AddBool(const char* key, bool value)
 
 bool ConfigLib::_Config::Config::SetBool(const char* key, bool value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (!m_Json.contains(key))
 	{
-		AddBool(key, value);
-		return true;
+		//AddBool(key, value);
+		return false;
 	}
 
 	m_Json[key] = value;
@@ -119,6 +131,8 @@ bool ConfigLib::_Config::Config::SetBool(const char* key, bool value)
 
 bool ConfigLib::_Config::Config::AddString(const char* key, const char* value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (m_Json.contains(key))
 		return false;
 
@@ -128,10 +142,12 @@ bool ConfigLib::_Config::Config::AddString(const char* key, const char* value)
 
 bool ConfigLib::_Config::Config::SetString(const char* key, const char* value)
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (!m_Json.contains(key))
 	{
-		AddString(key, value);
-		return true;
+		//AddString(key, value);
+		return false;
 	}
 
 	m_Json[key] = value;
@@ -140,6 +156,8 @@ bool ConfigLib::_Config::Config::SetString(const char* key, const char* value)
 
 bool ConfigLib::_Config::Config::SaveConfig()
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (m_FileStream.is_open())
 	{
 
@@ -168,6 +186,8 @@ bool ConfigLib::_Config::Config::SaveConfig()
 
 bool ConfigLib::_Config::Config::LoadConfig()
 {
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
 	if (std::filesystem::exists(m_FilePath))
 	{
 		if (!m_FileStream.is_open())
@@ -188,6 +208,28 @@ bool ConfigLib::_Config::Config::LoadConfig()
 
 	}
 	return false;
+}
+
+bool ConfigLib::_Config::Config::DeleteEntry(const char* Key)
+{
+	std::lock_guard<std::mutex> mute_lock(m_Mutex);
+
+	if (!m_Json.contains(Key))
+		return false;
+
+	m_Json.erase(Key);
+	return true;
+}
+
+nlohmann::json* ConfigLib::_Config::Config::GetJson()
+{
+	std::lock_guard<std::mutex> mutex_lock(m_Mutex);
+
+	if (m_Json)
+		return &m_Json;
+
+
+	return nullptr;
 }
 
 ConfigLib::ConfigManager::ConfigManager(const wchar_t* ConfigFolderPath) : m_FolderPath(ConfigFolderPath)
