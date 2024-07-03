@@ -22,9 +22,10 @@ SOFTWARE.
 */
 
 
-#pragma once
+##pragma once
 #include <filesystem>
 #include <fstream>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <optional>
@@ -54,13 +55,30 @@ namespace ConfigLib
 				}
 			}
 
+			//Move constructor
+			Config(Config&& other) noexcept : m_FileName(std::move(other.m_FileName)), m_FilePath(std::move(other.m_FilePath)), m_FileStream(std::move(m_FileStream)), m_Json(std::move(other.m_Json))
+			{
+			}
+
+			//Move Assignment Operator
+			Config& operator=(Config&& other) noexcept
+			{
+				if (this != &other) {
+					std::lock_guard<std::mutex> lock(m_Mutex);
+					m_FileName = std::move(other.m_FileName);
+					m_FilePath = std::move(other.m_FilePath);
+					m_Json = std::move(other.m_Json);
+				}
+				return *this;
+			}
+
 			//! 
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (int)
 			//! @return If it was successfully added (bool)
 			bool AddInteger(const char* key, int value);
 
-			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! This function only changes the value
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should change (int)
 			//! @return If it was successfully changed (bool)
@@ -72,7 +90,7 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddFloat(const char* key, float value);
 
-			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! This function only changes the value
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should change (float)
 			//! @return If it was successfully changed (bool)
@@ -84,7 +102,7 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddArray(const char* key, const std::vector<nlohmann::json>& values);
 
-			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! This function only changes the value
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param values The value which it should add (std::vector)
 			//! @return If it was successfully changed (bool)
@@ -96,7 +114,7 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddBool(const char* key, bool value);
 
-			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! This function only changes the value
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (bool)
 			//! @return If it was successfully changed (bool)
@@ -108,7 +126,7 @@ namespace ConfigLib
 			//! @return If it was successfully added (bool)
 			bool AddString(const char* key, const char* value);
 
-			//! This function does not only change the value, it also adds a entry if the key is not found
+			//! This function only changes the value
 			//! @param key The key which u need, to identify the config (ConfigName)
 			//! @param value The value which it should add (bool)
 			//! @return If it was successfully changed (bool)
@@ -129,7 +147,17 @@ namespace ConfigLib
 			//! @return If the parsing was successfully
 			bool LoadConfig();
 
+			//! 
+			//! @param Key The key which identifies the value
+			//! @return If the deletion was successfully
+			bool DeleteEntry(const char* Key);
+
+			//! Get the current Json Object
+			//! @return Returns the current Json object
+			nlohmann::json* GetJson();
+
 		public:
+			std::mutex m_Mutex{};
 			std::wstring m_FileName = {};
 			std::wstring m_FilePath = {};
 			std::fstream m_FileStream = {};
