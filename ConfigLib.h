@@ -1,6 +1,4 @@
 #pragma once
-#include "src/Config.h"
-
 /*MIT License
 
 Copyright (c) 2024 seoulxss
@@ -23,3 +21,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+#include "src/Config.h"
