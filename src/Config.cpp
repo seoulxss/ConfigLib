@@ -1,3 +1,5 @@
+#include "Config.h"
+
 /*MIT License
 
 Copyright (c) 2024 seoulxss
@@ -300,7 +302,7 @@ bool ConfigLib::ConfigManager::DeleteAllConfigs()
 {
 	if (std::filesystem::exists(m_FolderPath))
 	{
-		std::filesystem::directory_iterator it(m_FolderPath);
+		const std::filesystem::directory_iterator it(m_FolderPath);
 
 		for (auto& entry : it)
 		{
@@ -318,7 +320,7 @@ bool ConfigLib::ConfigManager::DeleteAllConfigs()
 	return false;
 }
 
-std::vector<std::wstring> ConfigLib::ConfigManager::GetAllConfigEntries()
+std::vector<std::wstring> ConfigLib::ConfigManager::GetAllConfigEntries() const
 {
 	std::vector<std::wstring> vec;
 	vec.reserve(m_Configs.size());
@@ -333,5 +335,5 @@ std::vector<std::wstring> ConfigLib::ConfigManager::GetAllConfigEntries()
 
 std::wstring ConfigLib::ConfigManager::GetConfigFolderPath() const
 {
-	return std::wstring(m_FolderPath);
+	return { m_FolderPath };
 }
