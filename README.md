@@ -2,6 +2,7 @@
 <p>This library is for people who want to add configs quickly and save them on the disk. If you care about performance, this is probably the wrong place. I designed this library to make it as easy as possible. If you care about performance you <b>CAN</b> still use it if you dont write that much to the json file (I mean saving with that).</p>
 
 <h1>This is still WIP!</h1>
+<p>I've finished most of the features that I need. If you want to add stuff & improve it, just make a pull request</p>
 
 <h1>Requirements</h1>
 <p>You need to link nhlohmann json with this project (I did use the static one with vcpkg)</p>
