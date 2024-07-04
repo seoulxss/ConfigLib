@@ -1,3 +1,8 @@
+#pragma once
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <mutex>
+
 /*MIT License
 
 Copyright (c) 2024 seoulxss
@@ -20,17 +25,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-
-##pragma once
-#include <filesystem>
-#include <fstream>
-#include <mutex>
-#include <string>
-#include <unordered_map>
-#include <optional>
-
-#include <nlohmann/json.hpp>
 
 namespace ConfigLib
 {
@@ -211,14 +205,14 @@ namespace ConfigLib
 
 		//! 
 		//! @return Returns all config names in a vector as a std::wstring
-		std::vector<std::wstring> GetAllConfigEntries();
+		std::vector<std::wstring> GetAllConfigEntries() const;
 
 		//! 
 		//! @return Returns the current folder path
 		std::wstring GetConfigFolderPath() const;
 
 	private:
-		std::unordered_map<std::wstring, ConfigLib::_Config::Config> m_Configs;
+		std::unordered_map<std::wstring, ConfigLib::_Config::Config> m_Configs = {};
 		const wchar_t* m_FolderPath = nullptr;
 
 	};
