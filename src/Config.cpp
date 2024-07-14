@@ -290,10 +290,10 @@ bool ConfigLib::ConfigManager::DeleteConfig(const wchar_t* ConfigName)
 		if (std::filesystem::exists(str))
 		{
 			std::filesystem::remove(str);
-			return true;
 		}
 
 		m_Configs.erase(ConfigName);
+		return true;
 	}
 	return false;
 }
